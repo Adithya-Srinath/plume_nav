@@ -21,6 +21,7 @@ import tf
 from tf.transformations import euler_from_quaternion
 from olfaction_msgs.msg import anemometer, gas_sensor
 import warnings
+from std_msgs.msg import Float32
 
 warnings.filterwarnings("error", "divide", RuntimeWarning)
 
@@ -91,6 +92,7 @@ class Prob_Mapping:
 
             if self.verbose:
                 rospy.loginfo("Wind_x = {}".format(wind_inst[0]))
+            # rospy.loginfo("Wind_direction = {}".format(wind_dir))
 
         
     def sensor_callback(self, msg):
@@ -131,6 +133,7 @@ class Prob_Mapping:
 
         # Publisher
         prob_pub = rospy.Publisher("mapping_viz", OccupancyGrid, queue_size=10)
+        conc_pub = rospy.Publisher("concentration", Float32, queue_size=10)
         
         if self.use_service_for_gas:
             rospy.wait_for_service("odor_value")
@@ -186,7 +189,7 @@ class Prob_Mapping:
             else:
                 gas_conc = self.gas_conc
 
-            rospy.loginfo("x,y = [%.2f,%.2f], Gas concentration: %.2f",x_pos,y_pos,gas_conc)
+            rospy.loginfo("x,y = [%.2f,%.2f], Gas conc: %.2f",x_pos,y_pos,gas_conc)
 
             # Check if detection occurs     
             detection = gas_conc > 0      
@@ -275,6 +278,7 @@ class Prob_Mapping:
                 # rospy.loginfo("time interval %f",(curr_time-wind_data[0][-1]).to_sec())
             
             prob_pub.publish(prob)
+            conc_pub.publish(gas_conc)
             
             r.sleep()
 

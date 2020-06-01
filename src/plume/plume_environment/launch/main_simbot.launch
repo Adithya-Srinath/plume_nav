@@ -12,7 +12,7 @@
     ### ROBOT SIMULATION ###
     <param name="use_sim_time" value="true" />
 
-    <node pkg="stage_ros" type="stageros" name="stage_ros" respawn="false" output="screen" args="$(find plume_environment)/launch/ros/stage.world" >
+    <node pkg="stage_ros" type="stageros" name="stage_ros" respawn="false" output="screen" args="$(find plume_environment)/environments/$(arg scenario)/launch/ros/stage.world" >
         <param name="laser_scan_topic" value="/laser_scan"/>
         <param name="laser_frame_id" value="laser_stage" />
         <param name="odom_topic" value="/odom"/>
@@ -37,7 +37,7 @@
     </node>
 
     ### RVIZ ###
-    <node name="rviz_player" pkg="rviz" type="rviz" args="-d $(find plume_environment)/launch/ros/gaden.rviz"/>
+    <node name="rviz_player" pkg="rviz" type="rviz" args="-d $(find plume_environment)/environments/$(arg scenario)/launch/ros/gaden.rviz"/>
   
   
 # ===================== GADEN =====================================
